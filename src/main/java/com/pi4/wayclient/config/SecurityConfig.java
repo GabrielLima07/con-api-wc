@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth/signup_admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth/signup_employee").permitAll()
+                        .requestMatchers(HttpMethod.POST, "auth/signup_customer").permitAll()
                         //.requestMatchers(HttpMethod.POST, "auth/signup_admin").hasRole("ADMIN")
                         //.requestMatchers(HttpMethod.POST, "auth/signup_employee").hasRole("ADMIN")
                         //.requestMatchers(HttpMethod.POST, "auth/signup_customer").permitAll()
