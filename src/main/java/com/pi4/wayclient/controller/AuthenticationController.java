@@ -2,10 +2,7 @@ package com.pi4.wayclient.controller;
 
 import com.pi4.wayclient.dto.*;
 import com.pi4.wayclient.model.*;
-import com.pi4.wayclient.repository.AdminRepository;
-import com.pi4.wayclient.repository.CustomerRepository;
-import com.pi4.wayclient.repository.EmployeeRepository;
-import com.pi4.wayclient.repository.UserRepository;
+import com.pi4.wayclient.repository.*;
 import com.pi4.wayclient.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("auth")
@@ -32,6 +31,8 @@ public class AuthenticationController {
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
+    private DepartmentRepository departmentRepository;
+    @Autowired
     private TokenService tokenService;
 
     @PostMapping("/login")
@@ -41,7 +42,21 @@ public class AuthenticationController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        String userType = "";
+        UUID userId = null;
+
+        if (adminRepository.findByEmail(data.email()).isPresent()) {
+            userType = "ADMIN";
+            userId = adminRepository.findByEmail(data.email()).get().getId();
+        } else if (employeeRepository.findByEmail(data.email()).isPresent()) {
+            userType = "EMPLOYEE";
+            userId = employeeRepository.findByEmail(data.email()).get().getId();
+        } else if (customerRepository.findByEmail(data.email()).isPresent()){
+            userType = "CUSTOMER";
+            userId = customerRepository.findByEmail(data.email()).get().getId();
+        }
+
+        return ResponseEntity.ok(new LoginResponseDTO(token, userType, userId));
     }
 
     @PostMapping("/signup_admin")
@@ -72,9 +87,12 @@ public class AuthenticationController {
     public ResponseEntity signUp(@RequestBody @Valid SignUpEmployeeDTO data) {
         if(userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
+        Department department = departmentRepository.findByName(data.departmentName());
+        if(department == null) return ResponseEntity.badRequest().body("Departamento não existe");
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        Employee newEmployee = new Employee(data.email(), data.name(), encryptedPassword, data.role(), data.department(), data.position());
+        Employee newEmployee = new Employee(data.email(), data.name(), encryptedPassword, data.role(), department);
         this.employeeRepository.save(newEmployee);
 
         return ResponseEntity.ok().build();

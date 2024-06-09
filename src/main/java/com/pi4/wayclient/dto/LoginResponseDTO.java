@@ -1,4 +1,6 @@
 package com.pi4.wayclient.dto;
 
-public record LoginResponseDTO(String token) {
+import java.util.UUID;
+
+public record LoginResponseDTO(String token, String userType, UUID userId) {
 }

@@ -1,5 +1,6 @@
 package com.pi4.wayclient.controller;
 
+import com.pi4.wayclient.model.Department;
 import com.pi4.wayclient.model.Employee;
 import com.pi4.wayclient.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,6 @@ public class EmployeeController {
         return employeeService.updateEmployee(id, employee);
     }
 
-
     @DeleteMapping("/{id}")
     public String deleteEmployee(@PathVariable UUID id) {
         try {
@@ -48,5 +48,15 @@ public class EmployeeController {
         } catch (Exception e) {
             return "Failed to delete employee with ID " + id + ": " + e.getMessage();
         }
+    }
+
+    @GetMapping("/{id}/department")
+    public Department getDepartmentByEmployeeId(@PathVariable UUID id) {
+        return employeeService.getEmployeeDepartment(id);
+    }
+
+    @GetMapping("/email/{email}/department")
+    public Department getDepartmentByEmployeeEmail(@PathVariable String email) {
+        return employeeService.getEmployeeDepartmentByEmail(email);
     }
 }

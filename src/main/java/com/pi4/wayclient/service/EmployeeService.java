@@ -1,5 +1,6 @@
 package com.pi4.wayclient.service;
 
+import com.pi4.wayclient.model.Department;
 import com.pi4.wayclient.model.Employee;
 import com.pi4.wayclient.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,17 @@ public class EmployeeService {
 
     public void deleteEmployee(UUID id) {
         employeeRepository.deleteById(id);
+    }
+
+    public Department getEmployeeDepartment(UUID employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return employee.getDepartment();
+    }
+
+    public Department getEmployeeDepartmentByEmail(String email) {
+        Employee employee = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return employee.getDepartment();
     }
 }

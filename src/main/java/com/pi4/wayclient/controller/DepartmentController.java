@@ -22,6 +22,7 @@ public class DepartmentController {
     public Department postDepartament(@RequestBody Department department){
         return departmentService.createDepartment(department);
     }
+
     @GetMapping
     public List<Department> getDepartment(){return  departmentService.getAllDepartment();}
 
@@ -29,11 +30,18 @@ public class DepartmentController {
     public Optional<Department> getDepartment(@PathVariable UUID id){
         return departmentService.getDepartment(id);
     }
+
+    @GetMapping("/{name}")
+    public Department getDepartmentByName(@PathVariable String name) {
+        return departmentService.getDepartmentByName(name);
+    }
+
     @PutMapping("/{id}")
     public Department putDepartment(@PathVariable UUID id, @RequestBody Department department){
         department.setId(id);
         return departmentService.updateDepartment(department);
     }
+
     @DeleteMapping("/{id}")
     public String deleteDepartment(@PathVariable UUID id){
         try{

@@ -20,15 +20,23 @@ public class DepartmentService {
     public Department createDepartment(Department department){
         return departmentRepository.save(department);
     }
+
     public List<Department> getAllDepartment(){
         return departmentRepository.findAll();
     }
+
     public Optional<Department> getDepartment(UUID id){
         return departmentRepository.findById(id);
     }
+
+    public Department getDepartmentByName(String name) {
+        return departmentRepository.findByName(name);
+    }
+
     public Department updateDepartment(Department department){
         return departmentRepository.save(department);
     }
+
     public void deleteDepartment(UUID id){
         departmentRepository.deleteById(id);
     }

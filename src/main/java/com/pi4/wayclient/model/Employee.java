@@ -23,9 +23,8 @@ public class Employee extends User {
     @Column
     private String position;
 
-    public Employee(String email, String name, String password, UserRole role, Department department, String position) {
+    public Employee(String email, String name, String password, UserRole role, Department department) {
         super(email, name, password, role);
         this.department = department;
-        this.position = position;
     }
 }
