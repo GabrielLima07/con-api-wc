@@ -21,14 +21,15 @@ public class Department {
     @Column(nullable = false)
     private String name;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "department-employee")
     @OneToMany(mappedBy = "department")
     private List<Employee> employees;
 
     @ManyToMany(mappedBy = "departments")
     private List<Admin> admins;
 
-    @OneToOne(mappedBy = "department", cascade = CascadeType.ALL)
-    private TicketType ticket_type;
+    @JsonManagedReference(value = "department-ticket")
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
 
 }

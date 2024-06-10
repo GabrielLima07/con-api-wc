@@ -1,6 +1,7 @@
 package com.pi4.wayclient.service;
 
 import com.pi4.wayclient.model.Department;
+import com.pi4.wayclient.model.Ticket;
 import com.pi4.wayclient.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class DepartmentService {
         return departmentRepository.findByName(name);
     }
 
+    //TODO: Refatorar - alterar função p/ seguir padrão de update dos outros services
     public Department updateDepartment(Department department){
         return departmentRepository.save(department);
     }
@@ -41,4 +43,13 @@ public class DepartmentService {
         departmentRepository.deleteById(id);
     }
 
+    public List<Ticket> getDepartmentTickets(UUID id) {
+        Optional<Department> department = departmentRepository.findById(id);
+
+        if(department.isPresent()) {
+            return department.get().getTickets();
+        } else {
+            return null;
+        }
+    }
 }

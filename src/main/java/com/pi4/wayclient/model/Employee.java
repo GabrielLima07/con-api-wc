@@ -17,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class Employee extends User {
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "department-employee")
     @JoinColumn(name = "department_id")
     private Department department;
     @Column

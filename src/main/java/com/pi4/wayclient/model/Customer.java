@@ -22,7 +22,7 @@ public class Customer extends User {
     @Column(nullable = false)
     private String phone;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "customer-ticket")
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 

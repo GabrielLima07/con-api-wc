@@ -32,6 +32,7 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    //TODO: Refatorar: alterar função p/ seguir padrão de update dos outros services
     public Product updateProduct(Product product) {
         return productRepository.save(product);
     }

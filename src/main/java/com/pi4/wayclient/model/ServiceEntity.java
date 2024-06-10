@@ -20,6 +20,6 @@ public class ServiceEntity {
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ticket_detail_id", referencedColumnName = "id")
-    private TicketDetail ticketDetail;
+    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    private Ticket ticket;
 }

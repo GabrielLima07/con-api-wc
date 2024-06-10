@@ -1,11 +1,12 @@
 package com.pi4.wayclient.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -18,16 +19,29 @@ public class Ticket {
     private UUID id;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "customer-ticket")
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ticket_type_id", referencedColumnName = "id")
-    private TicketType ticketType;
+    @ManyToOne
+    @JsonBackReference(value = "department-ticket")
+    @JoinColumn(name="department_id", referencedColumnName = "id")
+    private Department department;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ticket_detail_id", referencedColumnName = "id")
-    private TicketDetail ticketDetail;
+    @OneToOne(mappedBy = "ticket")
+    private Product product;
+
+    @OneToOne(mappedBy ="ticket")
+    private ServiceEntity service;
+
+    @Column(nullable = false)
+    private String status;
+
+    @JsonFormat(pattern="dd/MM/yyyy")
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private String description;
 
 }

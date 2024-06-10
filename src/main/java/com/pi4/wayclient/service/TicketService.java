@@ -32,8 +32,12 @@ public class TicketService {
     public Ticket updateTicket(UUID id, Ticket updatedTicket) {
         return ticketRepository.findById(id)
                 .map(ticket -> {
-                    ticket.setTicketType((updatedTicket.getTicketType() == null) ? ticket.getTicketType() : updatedTicket.getTicketType());
-                    ticket.setTicketDetail((updatedTicket.getTicketDetail() == null) ? ticket.getTicketDetail() : updatedTicket.getTicketDetail());
+                    ticket.setDepartment((updatedTicket.getDepartment() == null) ? ticket.getDepartment() : updatedTicket.getDepartment());
+                    ticket.setProduct((updatedTicket.getProduct() == null) ? ticket.getProduct() : updatedTicket.getProduct());
+                    ticket.setService((updatedTicket.getService() == null) ? ticket.getService() : updatedTicket.getService());
+                    ticket.setStatus((updatedTicket.getStatus() == null) ? ticket.getStatus() : updatedTicket.getStatus());
+                    ticket.setDescription((updatedTicket.getDescription() == null) ? ticket.getDescription() : updatedTicket.getDescription());
+                    //ticket.setDate((updatedTicket.getDate() == null) ? ticket.getDate() : updatedTicket.getDate());
                     return ticketRepository.save(ticket);
                 })
                 .orElseGet(() -> ticketRepository.save(updatedTicket));

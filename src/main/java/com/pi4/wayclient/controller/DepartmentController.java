@@ -1,8 +1,11 @@
 package com.pi4.wayclient.controller;
 
 import com.pi4.wayclient.model.Department;
+import com.pi4.wayclient.model.Ticket;
 import com.pi4.wayclient.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,5 +53,10 @@ public class DepartmentController {
         }catch (Exception e){
             return "Failed to delete department with ID" + id + ": " + e.getMessage();
         }
+    }
+
+    @GetMapping("/tickets/{id}")
+    public ResponseEntity<List<Ticket>> getDepartmentTickets(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(departmentService.getDepartmentTickets(id));
     }
 }
