@@ -1,5 +1,6 @@
 package com.pi4.wayclient.controller;
 
+import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.model.Ticket;
 import com.pi4.wayclient.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,10 @@ public class TicketController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/{ticketId}/customer")
+    public Customer getCustomerByTicketId(@PathVariable UUID ticketId) {
+        return ticketService.getCustomerByTicketId(ticketId);
     }
 }

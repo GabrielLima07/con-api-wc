@@ -28,6 +28,11 @@ public class Ticket {
     @JoinColumn(name="department_id", referencedColumnName = "id")
     private Department department;
 
+    @ManyToOne
+    @JsonBackReference(value = "employee-ticket")
+    @JoinColumn(name="employee_id", referencedColumnName = "id")
+    private Employee employee;
+
     @OneToOne(mappedBy = "ticket")
     private Product product;
 
@@ -43,5 +48,8 @@ public class Ticket {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private String title;
 
 }

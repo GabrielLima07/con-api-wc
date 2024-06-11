@@ -1,6 +1,7 @@
 package com.pi4.wayclient.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,9 @@ public class Employee extends User {
     private Department department;
     @Column
     private String position;
+    @OneToMany
+    @JsonManagedReference(value = "employee-ticket")
+    private List<Ticket> tickets;
 
     public Employee(String email, String name, String password, UserRole role, Department department) {
         super(email, name, password, role);
