@@ -13,6 +13,9 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     @Query("SELECT t FROM Ticket t WHERE t.customer.email = :email")
     List<Ticket> findByCustomerEmail(@Param("email") String email);
 
-//    @Query(value = "SELECT * FROM Ticket t JOIN TicketDetail td ON t.ticket_detail_id = td.id WHERE td.status = :status", nativeQuery = true)
-//    List<Ticket> findByTicketStatus(@Param("status") String status);
+    @Query("SELECT t FROM Ticket t LEFT JOIN FETCH t.customer")
+    List<Ticket> findAllWithCustomer();
+
+    @Query("SELECT t FROM Ticket t LEFT JOIN FETCH t.customer WHERE t.department.id = :departmentId")
+    List<Ticket> findByDepartmentIdWithCustomer(UUID departmentId);
 }
