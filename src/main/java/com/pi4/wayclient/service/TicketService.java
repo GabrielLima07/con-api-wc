@@ -1,10 +1,17 @@
 package com.pi4.wayclient.service;
 
+import com.pi4.wayclient.dto.TicketDTO;
 import com.pi4.wayclient.model.Customer;
+import com.pi4.wayclient.model.Department;
+import com.pi4.wayclient.model.Employee;
 import com.pi4.wayclient.model.Ticket;
+import com.pi4.wayclient.repository.CustomerRepository;
+import com.pi4.wayclient.repository.DepartmentRepository;
+import com.pi4.wayclient.repository.EmployeeRepository;
 import com.pi4.wayclient.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -12,18 +19,66 @@ import java.util.UUID;
 @Service
 public class TicketService {
     private final TicketRepository ticketRepository;
+    private final CustomerRepository customerRepository;
+    private final DepartmentRepository departmentRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, CustomerRepository customerRepository, DepartmentRepository departmentRepository, EmployeeRepository employeeRepository) {
         this.ticketRepository = ticketRepository;
+        this.customerRepository = customerRepository;
+        this.departmentRepository = departmentRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public Ticket createTicket(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
 
-    public List<Ticket> retrieveTickets() {
-        return ticketRepository.findAll();
+    public List<TicketDTO> retrieveTickets() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        List<TicketDTO> ticketDTOs = new ArrayList<>();
+        String employeeName = "Nenhum";
+        String departmentName = "Sem departamento";
+
+        for (Ticket ticket : tickets) {
+            Optional<Customer> customer = customerRepository.findById(ticket.getCustomer().getId());
+
+            if (ticket.getDepartment() != null) {
+                Optional<Department> department = departmentRepository.findById(ticket.getDepartment().getId());
+                if (department.isPresent()) {
+                    departmentName = department.get().getName();
+                }
+            } else {
+                departmentName = "Sem departamento";
+            }
+
+            if (ticket.getEmployee() != null) {
+                Optional<Employee> employee = employeeRepository.findById(ticket.getEmployee().getId());
+                if (employee.isPresent()) {
+                    employeeName = employee.get().getName();
+                }
+            } else {
+                employeeName = "Nenhum";
+            }
+
+            TicketDTO dto = new TicketDTO(
+                    ticket.getId(),
+                    ticket.getStatus(),
+                    ticket.getDate(),
+                    ticket.getDescription(),
+                    ticket.getTitle(),
+                    (customer.isPresent() ? customer.get().getName() : "Desconhecido"),
+                    departmentName,
+                    employeeName,
+                    ticket.getProduct(),
+                    ticket.getService()
+            );
+
+            ticketDTOs.add(dto);
+        }
+
+        return ticketDTOs;
     }
 
     public Optional<Ticket> retrieveTicketById(UUID id) {

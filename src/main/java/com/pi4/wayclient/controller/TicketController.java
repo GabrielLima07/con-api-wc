@@ -1,5 +1,6 @@
 package com.pi4.wayclient.controller;
 
+import com.pi4.wayclient.dto.TicketDTO;
 import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.model.Ticket;
 import com.pi4.wayclient.service.TicketService;
@@ -28,8 +29,8 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Ticket>> getTicket() {
-        List<Ticket> ticketList = ticketService.retrieveTickets();
+    public ResponseEntity<List<TicketDTO>> getTicket() {
+        List<TicketDTO> ticketList = ticketService.retrieveTickets();
         return ResponseEntity.status(HttpStatus.OK).body(ticketList);
     }
 
