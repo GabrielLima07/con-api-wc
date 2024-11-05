@@ -1,10 +1,8 @@
 package com.pi4.wayclient.controller;
 
-import com.pi4.wayclient.model.Admin;
 import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +31,13 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomer(@PathVariable UUID id) {
-        return customerService.getCustomer(id);
+    public Optional<Customer> getCustomer(@PathVariable UUID id) { return customerService.getCustomer(id);
+    }
+
+    @GetMapping("/name/{name}")
+    public List<Customer> getCustomerByName(@PathVariable String name) {
+        System.out.println("Buscando cliente com nome: " + name);
+        return customerService.getCustomerName(name);
     }
 
     @PutMapping("/{id}")
