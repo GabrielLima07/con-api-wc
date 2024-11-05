@@ -3,9 +3,7 @@ package com.pi4.wayclient.service;
 import com.pi4.wayclient.dto.CustomerDTO;
 import com.pi4.wayclient.dto.TicketDTO;
 import com.pi4.wayclient.model.Customer;
-import com.pi4.wayclient.model.Employee;
 import com.pi4.wayclient.repository.CustomerRepository;
-import com.pi4.wayclient.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +34,9 @@ public class CustomerService {
     public Optional<CustomerDTO> getCustomer(UUID id) {
         return customerRepository.findById(id)
                 .map(this::convertToCustomerDTO);
+    }
+    public List<Customer> getCustomerName(String name) {
+        return customerRepository.findByName(name);
     }
 
     private CustomerDTO convertToCustomerDTO(Customer customer) {
