@@ -1,5 +1,6 @@
 package com.pi4.wayclient.controller;
 
+import com.pi4.wayclient.dto.CustomerDTO;
 import com.pi4.wayclient.model.Admin;
 import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.service.CustomerService;
@@ -33,7 +34,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomer(@PathVariable UUID id) {
+    public Optional<CustomerDTO> getCustomer(@PathVariable UUID id) {
         return customerService.getCustomer(id);
     }
 
