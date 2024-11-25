@@ -2,6 +2,7 @@ package com.pi4.wayclient.service;
 
 import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.repository.CustomerRepository;
+import com.pi4.wayclient.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class CustomerService {
 
     private  final CustomerRepository customerRepository;
+
 
     @Autowired
     public CustomerService(CustomerRepository customerRepository)

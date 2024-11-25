@@ -35,6 +35,12 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
+    public List<Ticket> findTicketsByTitleAndCustomer(String title, UUID customerId) {
+        // Busca os tickets com base no título e no customerId
+        return ticketRepository.findByTitleIgnoreCaseAndCustomerId(title, customerId);
+    }
+
+
     public List<TicketDTO> retrieveTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
         List<TicketDTO> ticketDTOs = new ArrayList<>();
@@ -114,4 +120,6 @@ public class TicketService {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket not found"));
         return ticket.getCustomer();
     }
+
+
 }
