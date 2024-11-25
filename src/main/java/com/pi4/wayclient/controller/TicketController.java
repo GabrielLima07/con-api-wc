@@ -28,6 +28,7 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newTicket);
     }
 
+
     @GetMapping
     public ResponseEntity<List<TicketDTO>> getTicket() {
         List<TicketDTO> ticketList = ticketService.retrieveTickets();
@@ -60,4 +61,20 @@ public class TicketController {
     public Customer getCustomerByTicketId(@PathVariable UUID ticketId) {
         return ticketService.getCustomerByTicketId(ticketId);
     }
+
+    @GetMapping("/search/{customerId}")
+    public ResponseEntity<List<Ticket>> searchTicketsByTitle(
+            @PathVariable UUID customerId,
+            @RequestParam String title) {
+
+        // Busca os tickets do cliente com base no título
+        List<Ticket> tickets = ticketService.findTicketsByTitleAndCustomer(title, customerId);
+
+        if (tickets.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Retorna 204 se não encontrar tickets
+        }
+
+        return ResponseEntity.ok(tickets); // Retorna 200 com os tickets encontrados
+    }
+
 }
