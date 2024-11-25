@@ -46,7 +46,7 @@ public class Ticket {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
