@@ -6,7 +6,8 @@ import com.pi4.wayclient.repository.*;
 import com.pi4.wayclient.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -34,16 +37,23 @@ public class AuthenticationController {
     private DepartmentRepository departmentRepository;
     @Autowired
     private TokenService tokenService;
+    @Value("${recaptcha.secret.key}")
+    private String secretKey;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
+        String recaptchaToken = data.recaptchaToken();
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
         String userType = "";
         UUID userId = null;
+
+        if (!validateRecaptcha(recaptchaToken)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("reCAPTCHA inválido.");
+        }
 
         if (adminRepository.findByEmail(data.email()).isPresent()) {
             userType = "ADMIN";
@@ -96,5 +106,26 @@ public class AuthenticationController {
         this.employeeRepository.save(newEmployee);
 
         return ResponseEntity.ok().build();
+    }
+
+    public boolean validateRecaptcha(String token) {
+        String url = "https://www.google.com/recaptcha/api/siteverify";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        String body = "secret=" + secretKey + "&response=" + token;
+        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
+
+        Map<String, Object> responseBody = response.getBody();
+        if (responseBody != null && (boolean) responseBody.get("success")) {
+            return true;
+        } else {
+            System.err.println("Erro na validação do reCAPTCHA: " + responseBody);
+            return false;
+        }
     }
 }
