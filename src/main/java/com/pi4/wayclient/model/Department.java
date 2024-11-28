@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,4 +33,9 @@ public class Department {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
+    public Department(UUID id, String name) {
+        this.employees = new ArrayList<Employee>();
+        this.admins = new ArrayList<Admin>();
+        this.tickets = new ArrayList<Ticket>();
+    }
 }

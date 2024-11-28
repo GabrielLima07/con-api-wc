@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -27,6 +28,16 @@ public class Customer extends User {
     private List<Ticket> tickets;
 
     public Customer(String email, String name, String password, UserRole role, String phone) {
+        super(email, name, password, role);
+        this.phone = phone;
+    }
+
+    public Customer(UUID id,String email, String name, String password, UserRole role, String phone) {
+        super(email, name, password, role);
+        this.phone = phone;
+    }
+
+    public Customer(UUID id,String email, String name, String password, UserRole role, String phone, List<Ticket> tickets) {
         super(email, name, password, role);
         this.phone = phone;
     }
