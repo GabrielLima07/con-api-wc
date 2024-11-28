@@ -52,4 +52,17 @@ public class Ticket {
     @Column(nullable = false)
     private String title;
 
+    public Ticket(UUID id, Customer customer, Department department, Product product, ServiceEntity service,
+                  String status, LocalDate date, String description, String title
+    ) {
+       this.id = id;
+       this.customer = customer;
+       this.department = department;
+       this.product = product;
+       this.service = service;
+       this.status = status;
+       this.date = date;
+       this.description = description;
+       this.title = title;
+    }
 }
