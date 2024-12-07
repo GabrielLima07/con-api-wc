@@ -32,6 +32,10 @@ public class TicketService {
     }
 
     public Ticket createTicket(Ticket ticket) {
+        boolean ticketExists = ticketRepository.existsByCustomerAndTitle(ticket.getCustomer(), ticket.getTitle());
+        if (ticketExists) {
+            throw new IllegalArgumentException("Você já possui um ticket com este título.");
+        }
         return ticketRepository.save(ticket);
     }
 

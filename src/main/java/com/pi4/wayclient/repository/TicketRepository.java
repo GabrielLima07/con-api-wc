@@ -1,5 +1,6 @@
 package com.pi4.wayclient.repository;
 
+import com.pi4.wayclient.model.Customer;
 import com.pi4.wayclient.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,8 +21,7 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     @Query("SELECT t FROM Ticket t LEFT JOIN FETCH t.customer WHERE t.department.id = :departmentId")
     List<Ticket> findByDepartmentIdWithCustomer(UUID departmentId);
 
-    List<Ticket> findByTitleIgnoreCaseAndCustomerId(String title, UUID customerId); 
+    List<Ticket> findByTitleIgnoreCaseAndCustomerId(String title, UUID customerId);
 
-
-
+    boolean existsByCustomerAndTitle(Customer customer, String title);
 }
