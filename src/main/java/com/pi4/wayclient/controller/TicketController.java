@@ -23,11 +23,14 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> postTicket(@RequestBody Ticket ticket) {
-        Ticket newTicket = ticketService.createTicket(ticket);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newTicket);
+    public ResponseEntity<?> createTicket(@RequestBody Ticket ticket) {
+        try {
+            Ticket createdTicket = ticketService.createTicket(ticket);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
-
 
     @GetMapping
     public ResponseEntity<List<TicketDTO>> getTicket() {
